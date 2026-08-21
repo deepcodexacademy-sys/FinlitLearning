@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINLIT — Financial Learning & Innovation Technologies | Making Financial Knowledge Actionable</title>
+    
+    <!-- Google Fonts: Lexend (Headings) & Outfit (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Lexend', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            50: '#f0f6ff',
+                            100: '#e0edff',
+                            200: '#bae0ff',
+                            300: '#7cc8ff',
+                            400: '#36a8ff',
+                            500: '#0c87f8',
+                            600: '#0069d9',
+                            700: '#0052b0',
+                            800: '#044590',
+                            900: '#0a3a74',
+                            950: '#071e3d',
+                        },
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    },
+                    boxShadow: {
+                        'soft-glow': '0 20px 50px -10px rgba(12, 135, 248, 0.12)',
+                        'emerald-glow': '0 20px 50px -10px rgba(16, 185, 129, 0.18)',
+                        'card-clean': '0 10px 40px -15px rgba(15, 23, 42, 0.05)',
+                        'card-hover': '0 25px 50px -12px rgba(15, 23, 42, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS & Keyframe Animations -->
+    <style>
+        /* Smooth Page Transition Overlay */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #071e3d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        #page-loader.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-ring {
+            width: 70px;
+            height: 70px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #10b981;
+            border-right-color: #36a8ff;
+            border-radius: 50%;
+            animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-progress {
+            width: 140px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .loader-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #36a8ff, #10b981);
+            animation: fillProgress 1.2s ease-in-out forwards;
+        }
+
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Ambient background patterns & effects */
+        .bg-subtle-grid {
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, rgba(12, 135, 248, 0.05) 1px, transparent 1px);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .gradient-text-navy {
+            background: linear-gradient(135deg, #071e3d 0%, #0069d9 60%, #059669 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom range slider styling */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #0069d9;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 105, 217, 0.35);
+            border: 3px solid #ffffff;
+            transition: transform 0.15s ease;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* Fade-in reveal animation */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
+
+    <!-- INITIAL PAGE LOADING ANIMATION -->
+    <div id="page-loader">
+        <div class="relative flex items-center justify-center">
+            <div class="loader-ring"></div>
+            <div class="absolute text-white font-black text-xl font-display">
+                <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <span class="text-white font-black text-lg tracking-wider font-display block">FIN<span class="text-emerald-400">LIT</span></span>
+            <span class="text-slate-400 text-xs font-semibold uppercase tracking-widest block mt-0.5">Loading Your Learning Path...</span>
+        </div>
+        <div class="loader-progress">
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- Top Financial Alert Banner -->
+    <div class="bg-slate-950 text-white py-3 px-4 text-center text-xs sm:text-sm font-medium border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2.5 flex-wrap">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-graduation-cap mr-1"></i> New Batches 2026
+            </span>
+            <span class="text-slate-300">From financial literacy to a <strong class="text-white font-bold">BFSI & capital markets career</strong> — one learning path.</span>
+            <a href="#curriculum" class="text-emerald-400 hover:text-emerald-300 font-bold ml-1 inline-flex items-center gap-1 transition-colors">
+                See the Path <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Header & Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-header border-b border-slate-200/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3.5 group">
+                <div class="w-11 h-11 rounded-2xl bg-slate-900 flex items-center justify-center text-white text-xl font-black shadow-md shadow-slate-900/10 group-hover:bg-navy-800 transition-colors">
+                    <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-black tracking-tight text-slate-900 font-display">FIN<span class="text-emerald-600">LIT</span></span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 -mt-1 font-sans">Learning & Innovation</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center gap-9 text-sm font-semibold text-slate-600">
+                <a href="#ecosystem" class="hover:text-blue-700 transition-colors">Ecosystem</a>
+                <a href="#founder" class="hover:text-blue-700 transition-colors">Founder</a>
+                <a href="#analytics" class="hover:text-blue-700 transition-colors">Market Insights</a>
+                <a href="#quiz" class="hover:text-blue-700 transition-colors">Literacy Assessment</a>
+                <a href="#curriculum" class="hover:text-blue-700 transition-colors">Programs</a>
+            </nav>
+
+            <!-- CTA Buttons -->
+            <div class="hidden sm:flex items-center gap-4">
+                <a href="#quiz" class="text-xs font-bold text-slate-600 hover:text-slate-900 px-3 py-2 transition-colors">
+                    Financial Health Check
+                </a>
+                <a href="#curriculum" class="text-xs font-bold text-white bg-slate-900 hover:bg-navy-800 px-5 py-3 rounded-xl shadow-sm hover:shadow-md transition-all border border-slate-800">
+                    Explore FINLIT Programs
+                </a>
+            </div>
+
+            <!-- Mobile Drawer Button -->
+            <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden p-2.5 rounded-xl text-slate-700 hover:bg-slate-100/80 transition-colors">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-b border-slate-200 px-6 py-6 space-y-4">
+            <a href="#ecosystem" class="block py-2 text-slate-700 font-semibold hover:text-blue-700">Ecosystem</a>
+            <a href="#founder" class="block py-2 text-slate-700 font-semibold hover:text-blue-700">Founder</a>
+            <a href="#analytics" class="block py-2 text-slate-700 font-semibold hover:text-blue-700">Market Insights</a>
+            <a href="#quiz" class="block py-2 text-slate-700 font-semibold hover:text-blue-700">Literacy Assessment</a>
+            <a href="#curriculum" class="block py-2 text-slate-700 font-semibold hover:text-blue-700">Programs</a>
+            <div class="pt-4 border-t border-slate-100">
+                <a href="#curriculum" class="w-full block text-center py-3 font-bold text-white bg-slate-900 rounded-xl shadow-md">Explore FINLIT Programs</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden bg-slate-50 pt-6 pb-24 lg:pt-8 lg:pb-36 border-b border-slate-200/60">
+        <!-- Background Image with Reduced Opacity -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <img src="https://images.unsplash.com/photo-1618044733300-9472054094ee?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                 alt="FINLIT Hero Background" 
+                 class="w-full h-full object-cover object-center opacity-[0.08]"
+                 loading="lazy">
+        </div>
+        <div class="absolute inset-0 bg-subtle-grid opacity-60 pointer-events-none"></div>
+        <div class="absolute -top-32 right-10 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-10 left-10 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                
+                <!-- Left Narrative Column -->
+                <div class="lg:col-span-7 space-y-8 text-center lg:text-left reveal-up">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-bold shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Learn. Certify. Build a Career.
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.15] tracking-tight font-display">
+                        Financial Knowledge. <br/>
+                        <span class="gradient-text-navy">Practical Skills. Real Careers.</span>
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Learn finance, build market skills, and earn industry-recognised certifications with FINLIT — Financial Learning & Innovation Technologies. From personal money management to a career in BFSI and capital markets, one learning path takes you there.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#curriculum" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 hover:bg-navy-800 text-white font-bold rounded-2xl shadow-soft-glow hover:shadow-card-hover transition-all text-base font-display">
+                            Explore FINLIT Programs <i class="fa-solid fa-arrow-right text-emerald-400"></i>
+                        </a>
+                        <a href="#quiz" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-2xl border border-slate-200 shadow-sm transition-all text-base">
+                            <i class="fa-solid fa-list-check text-blue-600"></i> Take the Financial Literacy Test
+                        </a>
+                    </div>
+
+                    <!-- Trust Metrics Bar -->
+                    <div class="pt-8 border-t border-slate-200/80 grid grid-cols-3 gap-6 text-center lg:text-left">
+                        <div class="p-2">
+                            <div class="text-2xl sm:text-3xl font-black text-slate-900 font-display">100+</div>
+                            <div class="text-xs text-slate-500 font-medium mt-1">Sessions Delivered</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="text-2xl sm:text-3xl font-black text-emerald-600 font-display">NISM</div>
+                            <div class="text-xs text-slate-500 font-medium mt-1">Certification-Focused</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="text-lg sm:text-xl font-black text-slate-900 font-display leading-tight">Students<br class="hidden lg:block"/> • Professionals</div>
+                            <div class="text-xs text-slate-500 font-medium mt-1">& Institutions</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual: Animated Real-Life Story Card -->
+                <div class="lg:col-span-5 reveal-up" style="animation-delay: 0.15s;">
+                    <div id="life-story-card" class="bg-white rounded-3xl p-6 sm:p-8 shadow-card-hover border border-slate-200/80 relative overflow-hidden">
+
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                                    <i class="fa-solid fa-people-arrows"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-bold text-slate-900 text-base font-display">Same Salary. Same City. Two Lives.</h2>
+                                    <p class="text-xs text-slate-400">A real-life story — watch it play out to age 55</p>
+                                </div>
+                            </div>
+                            <button id="story-replay-btn" aria-label="Replay animation" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors shrink-0">
+                                <i class="fa-solid fa-rotate-right text-xs"></i>
+                            </button>
+                        </div>
+
+                        <!-- Age Ticker -->
+                        <div class="flex items-center gap-3 mt-4 mb-1">
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Age</span>
+                            <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div id="age-progress-bar" class="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full" style="width:0%;"></div>
+                            </div>
+                            <span id="age-counter" class="text-sm font-black text-slate-900 font-display w-9 text-right">25</span>
+                        </div>
+
+                        <!-- Two Life Tracks -->
+                        <div class="mt-5 space-y-4">
+
+                            <!-- Track A: No Financial Literacy -->
+                            <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                                        <i class="fa-solid fa-user text-rose-500"></i> Arjun — spends first, "saves" whatever's left
+                                    </span>
+                                    <span id="track-a-icon" class="text-base w-6 text-center transition-opacity duration-300 opacity-0">💳</span>
+                                </div>
+                                <div class="h-3 bg-white rounded-full overflow-hidden border border-rose-100/80">
+                                    <div id="track-a-bar" class="h-full bg-rose-400 rounded-full" style="width:4%; transition: width 1.4s ease;"></div>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span id="track-a-event" class="text-[11px] text-rose-700 font-semibold min-h-[14px]"></span>
+                                    <span id="track-a-value" class="text-sm font-black text-rose-600 font-display">₹0</span>
+                                </div>
+                            </div>
+
+                            <!-- Track B: Financially Literate -->
+                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 shadow-sm">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-emerald-900 flex items-center gap-2">
+                                        <i class="fa-solid fa-user text-emerald-600"></i> Priya — same income, pays herself first
+                                    </span>
+                                    <span id="track-b-icon" class="text-base w-6 text-center transition-opacity duration-300 opacity-0">🌱</span>
+                                </div>
+                                <div class="h-3 bg-white rounded-full overflow-hidden border border-emerald-200/80">
+                                    <div id="track-b-bar" class="h-full bg-emerald-500 rounded-full" style="width:4%; transition: width 1.4s ease;"></div>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span id="track-b-event" class="text-[11px] text-emerald-700 font-semibold min-h-[14px]"></span>
+                                    <span id="track-b-value" class="text-sm font-black text-emerald-700 font-display">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Narration Line -->
+                        <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs flex items-start gap-3 min-h-[60px]">
+                            <i class="fa-solid fa-quote-left text-blue-400 text-sm shrink-0 mt-0.5"></i>
+                            <p id="story-narration" class="leading-relaxed text-slate-600">
+                                Both start at 25 on the exact same ₹50,000/month salary. Press play and watch one decision compound for 30 years.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-center text-xs text-slate-400 mt-3">Illustrative example for education — not personalized financial advice.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 0: THE FINLIT ECOSYSTEM -->
+    <section id="ecosystem" class="py-24 bg-white border-t border-slate-200/80 relative">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-700 font-bold text-xs uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200/80">The FINLIT Ecosystem</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-4 font-display">
+                    One Ecosystem. Four Ways In.
+                </h2>
+                <p class="text-slate-500 mt-3 text-base leading-relaxed">
+                    FINLIT stands for Financial Learning & Innovation Technologies — a financial education, skills, certification and career ecosystem covering Learn → Skill → Certification → Career → Apply.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-blue-300 hover:-translate-y-1.5 hover:shadow-card-hover transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 border border-blue-200 flex items-center justify-center text-xl mb-5">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1 font-display">FINLIT Personal</h3>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-blue-600 mb-3">For Individuals</p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Money management, SIPs, mutual funds, investing basics, tax planning and retirement readiness.</p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 hover:-translate-y-1.5 hover:shadow-card-hover transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center justify-center text-xl mb-5">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1 font-display">FINLIT Markets</h3>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 mb-3">For Aspiring Traders & Investors</p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Technical analysis, fundamental analysis, derivatives and risk management for the capital markets.</p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-amber-300 hover:-translate-y-1.5 hover:shadow-card-hover transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 border border-amber-200 flex items-center justify-center text-xl mb-5">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1 font-display">FINLIT Careers</h3>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-amber-600 mb-3">For Students & Job Seekers</p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">NISM certification prep, BFSI skills, equity research, wealth management and dealer-role readiness.</p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-rose-300 hover:-translate-y-1.5 hover:shadow-card-hover transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 border border-rose-200 flex items-center justify-center text-xl mb-5">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1 font-display">FINLIT Juniors</h3>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-rose-600 mb-3">Class 8 Through Graduation</p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Age-appropriate financial education that builds money habits early, for the next generation.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: MARKET ANALYTICS & DATA INSIGHTS -->
+    <section id="analytics" class="py-24 bg-slate-50 border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <span class="text-blue-700 font-bold text-xs uppercase tracking-widest bg-blue-100 px-4 py-1.5 rounded-full border border-blue-200">Macro Analysis</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-4 font-display">
+                    Market Insights: Cost of Ignorance
+                </h2>
+                <p class="text-slate-500 mt-3 text-base">
+                    Verifiable economic data showing how informed investors outperform traditional saving habits.
+                </p>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Chart 1: Financial Literacy Comparison -->
+                <div class="lg:col-span-6 p-6 sm:p-9 rounded-3xl bg-white border border-slate-200/80 shadow-card-clean flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-lg font-bold text-slate-900 font-display">Global Financial Literacy Benchmark (%)</h3>
+                            <span class="text-[11px] bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md font-bold">S&P Global FinLit Survey</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-6">Percentage of adult population passing standard interest, inflation, and risk tests.</p>
+                        
+                        <div class="w-full h-64 sm:h-72 relative">
+                            <canvas id="literacyChart" class="w-full h-full block"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-600 flex items-center gap-2.5">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-base shrink-0"></i> 
+                        <span>India's financial literacy rate leaves many adults vulnerable to mis-selling and wealth erosion.</span>
+                    </div>
+                    <div class="mt-2 text-[11px] text-slate-400">
+                        Source: S&P Global FinLit Survey, 2014 · <a href="https://gflec.org/initiatives/sp-global-finlit-survey/" target="_blank" rel="noopener" class="text-blue-600 hover:underline font-semibold">View Source</a>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Household Wealth Distribution -->
+                <div class="lg:col-span-6 p-6 sm:p-9 rounded-3xl bg-white border border-slate-200/80 shadow-card-clean flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-lg font-bold text-slate-900 font-display">Indian Household Asset Breakdown</h3>
+                            <span class="text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-md font-bold">RBI Household Finance Committee</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-6">Where Indian households store their hard-earned wealth.</p>
+                        
+                        <div class="w-full h-64 sm:h-72 relative">
+                            <canvas id="allocationChart" class="w-full h-full block"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-600 flex items-center gap-2.5">
+                        <i class="fa-solid fa-circle-info text-blue-600 text-base shrink-0"></i> 
+                        <span>A large share of household wealth remains in low-yield physical or cash-heavy assets.</span>
+                    </div>
+                    <div class="mt-2 text-[11px] text-slate-400">
+                        Source: RBI Household Finance Committee Report · <a href="https://rbi.org.in" target="_blank" rel="noopener" class="text-blue-600 hover:underline font-semibold">View Source</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SIP Trend Chart -->
+            <div class="mt-8 p-6 sm:p-9 rounded-3xl bg-white border border-slate-200/80 shadow-card-clean">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 font-display">Monthly Equity SIP Growth Trend (₹ Crore)</h3>
+                        <p class="text-xs text-slate-500 mt-1">Retail investors shifting toward equity compounding as financial education spreads.</p>
+                    </div>
+                    <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl text-xs font-bold text-emerald-800 self-start md:self-auto">
+                        <i class="fa-solid fa-chart-line text-emerald-600"></i> Modern Wealth Shift
+                    </div>
+                </div>
+                <div class="w-full h-72 sm:h-80 relative">
+                    <canvas id="sipTrendChart" class="w-full h-full block"></canvas>
+                </div>
+                <div class="mt-4 text-[11px] text-slate-400">
+                    Source: AMFI Monthly SIP Data · <a href="https://www.amfiindia.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline font-semibold">View Source</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 3: WEALTH SIMULATOR & LITERACY ASSESSMENT -->
+    <section id="simulator" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <span class="text-blue-700 font-bold text-xs uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200/80">Interactive Tools</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-4 font-display">
+                    SIP Simulator & Literacy Assessment
+                </h2>
+                <p class="text-slate-500 mt-3 text-base">
+                    Simulate your compounding potential and test your financial decision-making skills.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-10 items-start">
+                
+                <!-- SIP Compounding Calculator -->
+                <div class="lg:col-span-7 bg-slate-50 p-7 sm:p-10 rounded-3xl border border-slate-200/80 shadow-card-clean">
+                    <div class="flex items-center justify-between border-b border-slate-200/80 pb-5 mb-8">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
+                                <i class="fa-solid fa-calculator text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base font-display">SIP Compounding Engine</h3>
+                                <p class="text-xs text-slate-500">Real mathematical future valuation</p>
+                            </div>
+                        </div>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-lg border border-emerald-200">Interactive</span>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Slider 1: Monthly Investment -->
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label for="monthly-sip" class="text-sm font-bold text-slate-800">Monthly Investment (₹)</label>
+                                <span id="monthly-val" class="text-base font-black text-slate-900 bg-white px-3.5 py-1 rounded-xl border border-slate-200 shadow-sm font-display">₹10,000</span>
+                            </div>
+                            <input type="range" id="monthly-sip" min="1000" max="100000" step="1000" value="10000" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[11px] text-slate-400 font-medium mt-1.5">
+                                <span>₹1,000</span>
+                                <span>₹50,000</span>
+                                <span>₹1,00,000</span>
+                            </div>
+                        </div>
+
+                        <!-- Slider 2: Annual Return -->
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label for="return-rate" class="text-sm font-bold text-slate-800">Expected Annual CAGR (%)</label>
+                                <span id="rate-val" class="text-base font-black text-slate-900 bg-white px-3.5 py-1 rounded-xl border border-slate-200 shadow-sm font-display">12%</span>
+                            </div>
+                            <input type="range" id="return-rate" min="4" max="20" step="0.5" value="12" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[11px] text-slate-400 font-medium mt-1.5">
+                                <span>4% (Savings)</span>
+                                <span>12% (Index Funds)</span>
+                                <span>20% (Optimized)</span>
+                            </div>
+                        </div>
+
+                        <!-- Slider 3: Duration -->
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label for="time-years" class="text-sm font-bold text-slate-800">Investment Horizon (Years)</label>
+                                <span id="years-val" class="text-base font-black text-slate-900 bg-white px-3.5 py-1 rounded-xl border border-slate-200 shadow-sm font-display">15 Years</span>
+                            </div>
+                            <input type="range" id="time-years" min="1" max="30" step="1" value="15" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[11px] text-slate-400 font-medium mt-1.5">
+                                <span>1 Year</span>
+                                <span>15 Years</span>
+                                <span>30 Years</span>
+                            </div>
+                        </div>
+
+                        <!-- Results Output -->
+                        <div class="p-6 sm:p-8 rounded-2xl bg-slate-950 text-white grid sm:grid-cols-3 gap-6 text-center shadow-xl">
+                            <div>
+                                <span class="text-xs text-slate-400 block font-medium mb-1">Total Invested</span>
+                                <span id="total-invested" class="text-lg font-bold text-slate-200 font-display">₹18,00,000</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-emerald-400 block font-medium mb-1">Estimated Gain</span>
+                                <span id="wealth-gain" class="text-lg font-bold text-emerald-400 font-display">₹32,45,760</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-400 block font-medium mb-1">Future Value</span>
+                                <span id="total-value" class="text-xl font-black text-white font-display">₹50,45,760</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Readiness Quiz -->
+                <div id="quiz" class="lg:col-span-5 bg-slate-50 p-7 sm:p-10 rounded-3xl border border-slate-200/80 shadow-card-clean flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex items-center gap-3.5 border-b border-slate-200/80 pb-5 mb-8">
+                            <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg border border-emerald-200">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base font-display">Financial Literacy Assessment</h3>
+                                <p class="text-xs text-slate-500">Test your money instincts</p>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Container -->
+                        <div id="quiz-container" class="space-y-6">
+                            <p id="quiz-question" class="font-bold text-slate-900 text-base leading-snug">
+                                Question 1: If inflation is 6% per year and your savings account pays 3%, how much purchasing power do you lose annually?
+                            </p>
+
+                            <div id="quiz-options" class="space-y-3">
+                                <button onclick="checkAnswer(0)" class="w-full p-4 text-left rounded-2xl border border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50/50 text-xs sm:text-sm font-semibold text-slate-700 transition-all shadow-sm">
+                                    A) Gain 3% net
+                                </button>
+                                <button onclick="checkAnswer(1)" class="w-full p-4 text-left rounded-2xl border border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50/50 text-xs sm:text-sm font-semibold text-slate-700 transition-all shadow-sm">
+                                    B) Lose approximately 3%
+                                </button>
+                                <button onclick="checkAnswer(2)" class="w-full p-4 text-left rounded-2xl border border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50/50 text-xs sm:text-sm font-semibold text-slate-700 transition-all shadow-sm">
+                                    C) Zero purchasing power loss
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Result Display -->
+                        <div id="quiz-result" class="hidden p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-5 shadow-sm">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mx-auto text-2xl font-bold shadow-md">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <h4 id="quiz-score-title" class="text-xl font-bold text-slate-900 font-display">Score: 3/3 Excellent!</h4>
+                            <p id="quiz-score-desc" class="text-xs text-slate-600 leading-relaxed">
+                                You have sound money fundamentals! Taking structured action on asset allocation can significantly speed up your long-term wealth independence.
+                            </p>
+                            <button onclick="resetQuiz()" class="px-6 py-3 bg-slate-900 hover:bg-navy-800 text-white text-xs font-bold rounded-xl shadow transition-all">
+                                Retake Assessment
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-5 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
+                        <span>Progress: Step <span id="quiz-progress-num">1</span> of 3</span>
+                        <a href="#curriculum" class="text-blue-700 font-bold hover:underline">View Courses &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 4: MASTERY CURRICULUM -->
+    <section id="curriculum" class="py-24 bg-slate-50 border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-blue-700 font-bold text-xs uppercase tracking-widest bg-blue-100 px-4 py-1.5 rounded-full border border-blue-200">Structured Path</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-4 font-display">
+                    The FINLIT Learning Path
+                </h2>
+                <p class="text-slate-500 mt-3 text-base">
+                    From financial literacy to a career in capital markets—build career-ready financial skills, one stage at a time.
+                </p>
+            </div>
+
+            <!-- Learning Path Ribbon -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-20 text-xs sm:text-sm font-bold">
+                <span class="px-4 py-2 rounded-full bg-emerald-600 text-white shadow-sm">START — Financial Literacy</span>
+                <i class="fa-solid fa-arrow-right-long text-slate-300 hidden sm:block"></i>
+                <span class="px-4 py-2 rounded-full bg-blue-600 text-white shadow-sm">BUILD — Market Skills</span>
+                <i class="fa-solid fa-arrow-right-long text-slate-300 hidden sm:block"></i>
+                <span class="px-4 py-2 rounded-full bg-amber-600 text-white shadow-sm">CERTIFY — NISM & Industry</span>
+                <i class="fa-solid fa-arrow-right-long text-slate-300 hidden sm:block"></i>
+                <span class="px-4 py-2 rounded-full bg-slate-900 text-white shadow-sm">CAREER — BFSI & Capital Markets</span>
+                <i class="fa-solid fa-arrow-right-long text-slate-300 hidden sm:block"></i>
+                <span class="px-4 py-2 rounded-full bg-rose-600 text-white shadow-sm">ADVANCE — Research & Valuation</span>
+            </div>
+
+            <!-- Course Cards Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- LEVEL 1 -->
+                <div class="rounded-3xl bg-white border border-slate-200/80 hover:border-emerald-300 transition-all duration-300 hover:shadow-card-hover group flex flex-col justify-between">
+                    <div class="p-8 sm:p-9">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold rounded-full flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> LEVEL 1
+                            </span>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md">Understand</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors mb-4 font-display">
+                            Financial Markets Foundation
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <ul class="space-y-3 text-xs sm:text-sm text-slate-600 font-medium border-b border-slate-100 pb-6">
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                    <span>Financial Markets & Equity Basics</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                    <span>Mutual Funds, SIP & Debt Assets</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                                    <span>NISM Certification Guidance</span>
+                                </li>
+                            </ul>
+
+                            <div>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Target Roles</span>
+                                <p class="text-xs font-semibold text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 leading-relaxed">
+                                    Relationship Manager • Mutual Fund Executive • BFSI Associate
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 sm:p-7 bg-slate-50 border-t border-slate-200/80 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Tuition</span>
+                            <span class="text-2xl font-black text-slate-900 font-display">₹2,999/-</span>
+                        </div>
+                        <a href="#enroll" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm">
+                            Enroll Level 1
+                        </a>
+                    </div>
+                </div>
+
+                <!-- LEVEL 2 (FEATURED) -->
+                <div class="rounded-3xl bg-white border-2 border-blue-600 relative shadow-card-hover transition-all duration-300 group flex flex-col justify-between transform lg:-translate-y-2">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] uppercase font-black px-4 py-1 rounded-bl-xl tracking-wider">
+                        Popular Program
+                    </div>
+                    <div class="p-8 sm:p-9">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3.5 py-1 bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold rounded-full flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-blue-600"></span> LEVEL 2
+                            </span>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-md">Analyse</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors mb-4 font-display">
+                            Professional Markets Program
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <ul class="space-y-3 text-xs sm:text-sm text-slate-700 font-medium border-b border-slate-100 pb-6">
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-blue-600 mt-1"></i>
+                                    <span>Fundamental & Technical Analysis</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-blue-600 mt-1"></i>
+                                    <span>Derivatives, Options & Trading</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-blue-600 mt-1"></i>
+                                    <span>Portfolio & Risk Management</span>
+                                </li>
+                            </ul>
+
+                            <div>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Target Roles</span>
+                                <p class="text-xs font-semibold text-slate-800 bg-blue-50/60 p-3.5 rounded-xl border border-blue-200/80 leading-relaxed">
+                                    Equity Dealer • Research Associate • Wealth Management Analyst
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 sm:p-7 bg-blue-50/60 border-t border-blue-200 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-wider text-slate-500 block">Tuition</span>
+                            <span class="text-2xl font-black text-slate-900 font-display">₹20,000/-</span>
+                        </div>
+                        <a href="#enroll" class="px-5 py-2.5 bg-slate-900 hover:bg-navy-800 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                            Enroll Level 2
+                        </a>
+                    </div>
+                </div>
+
+                <!-- LEVEL 3 -->
+                <div class="rounded-3xl bg-white border border-slate-200/80 hover:border-amber-300 transition-all duration-300 hover:shadow-card-hover group flex flex-col justify-between">
+                    <div class="p-8 sm:p-9">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3.5 py-1 bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold rounded-full flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> LEVEL 3
+                            </span>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-md">Build</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-4 font-display">
+                            Financial Modelling & Valuation
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <ul class="space-y-3 text-xs sm:text-sm text-slate-600 font-medium border-b border-slate-100 pb-6">
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-amber-600 mt-1"></i>
+                                    <span>Advanced Financial Modelling</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-amber-600 mt-1"></i>
+                                    <span>DCF & Corporate Valuation</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-circle-check text-amber-600 mt-1"></i>
+                                    <span>Institutional Equity Research</span>
+                                </li>
+                            </ul>
+
+                            <div>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Target Roles</span>
+                                <p class="text-xs font-semibold text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 leading-relaxed">
+                                    Financial Analyst • Research Analyst • Valuation Analyst
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 sm:p-7 bg-slate-50 border-t border-slate-200/80 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Tuition</span>
+                            <span class="text-2xl font-black text-slate-900 font-display">₹40,000/-</span>
+                        </div>
+                        <a href="#enroll" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm">
+                            Enroll Level 3
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 4B: CAREER OUTCOMES -->
+    <section class="py-24 bg-slate-950 text-white relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-emerald-300 text-xs font-bold uppercase tracking-wider">FINLIT Careers</span>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-4 font-display">
+                    Learn Finance. Build Skills. <span class="text-emerald-400">Build Your Career.</span>
+                </h2>
+                <p class="text-slate-300 mt-3 text-base leading-relaxed">
+                    FINLIT isn't just about courses—it's Education → Certification → Employability, with real support toward a role in BFSI and capital markets.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-certificate text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">NISM Certification Prep</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Structured preparation for industry-recognised NISM certifications.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-flask text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">Practical Market Projects</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Hands-on assignments that mirror real analyst and dealer workflows.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-file-lines text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">Resume & Profile Building</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Positioning your profile for BFSI and capital-market roles.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-comments text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">Interview Preparation</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Mock interviews and guidance specific to finance and markets roles.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-compass text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">BFSI Career Guidance</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">One-on-one guidance on which BFSI path fits your background.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-building text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">Industry Exposure</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Sessions and interactions connecting you with practitioners.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-handshake text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">Internship/Job Opportunities</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Connecting learners with relevant openings as they arise.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-people-group text-emerald-400 text-xl mb-4"></i>
+                    <h3 class="font-bold text-sm mb-1 font-display">Career-Focused Workshops</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Regular workshops on the FINLIT Career Network roadmap.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4C: SESSIONS GALLERY -->
+    <section id="gallery" class="py-24 bg-slate-50 border-t border-slate-200/80 overflow-hidden w-full">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-700 font-bold text-xs uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200">FINLIT in Action</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-4 font-display">
+                    Interactive Workshops & Learning Sessions
+                </h2>
+                <p class="text-slate-600 mt-3 text-sm sm:text-base leading-relaxed">
+                    A glimpse into our physical seminars, college interactive sessions, and offline financial literacy programs helping build a money-smart India.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slider Wrapper (Full Width of Screen) -->
+        <div class="relative group w-full overflow-hidden">
+            <!-- Outer Carousel Container -->
+            <div class="overflow-hidden w-full bg-slate-900">
+                <div id="gallery-track" class="flex transition-transform duration-500 ease-out">
+                    <!-- Slide 1 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="2.jpeg" alt="Interactive Finance Workshop" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Ecosystem Workshop</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">College Career Seminars</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="3.jpeg" alt="Personal Finance Session" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Financial Literacy</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Practical Wealth Roadmap</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <!-- <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="4.jpeg" alt="Market Analytics Masterclass" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Mastery Bootcamp</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Advanced Markets Foundation</h3>
+                        </div>
+                    </div> -->
+                    <!-- Slide 4 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="6.jpeg" alt="Industry Networking Meet" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Career Network</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Capital Market Careers</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 5 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="7.jpeg" alt="NISM Prep Live Classroom" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Certification Prep</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">NISM Certification Classroom</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 6 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="8.jpeg" alt="Interactive Capital Markets Seminar" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">BSE FinX Partner</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">BFSI Employability Path</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 7 -->
+                    <!-- <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="9.jpeg" alt="Youth Financial Summit" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Financial Defense</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Personal Finance Ecosystem</h3>
+                        </div>
+                    </div> -->
+                    <!-- Slide 8 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="10.jpeg" alt="BFSI Employability Program" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Valuation Labs</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Hands-On Analyst Internships</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 9 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="11.jpeg" alt="Adult Education Project" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Financial Wellness</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Defeating Inflation Strategies</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 10 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="12.jpeg" alt="Mock Stock Trading Session" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Practical Trading</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Virtual Simulator Practice</h3>
+                        </div>
+                    </div>
+                    <!-- Slide 11 -->
+                    <div class="min-w-full w-full shrink-0 relative overflow-hidden aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] group/slide bg-slate-100">
+                        <img src="13.jpeg" alt="Financial Wellness Seminar" class="w-full h-full object-cover object-center transition-transform duration-500 group-hover/slide:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-16">
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 font-display tracking-widest">Corporate Summit</span>
+                            <h3 class="text-white font-black text-sm sm:text-lg md:text-2xl mt-0.5 font-display">Employee Career Growth</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Controls -->
+            <button id="gallery-prev" class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 text-slate-800 flex items-center justify-center shadow-lg hover:shadow-xl border border-slate-200/50 transition-all z-20 hover:scale-105 active:scale-95 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 duration-300" aria-label="Previous slide">
+                <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
+            </button>
+            <button id="gallery-next" class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 text-slate-800 flex items-center justify-center shadow-lg hover:shadow-xl border border-slate-200/50 transition-all z-20 hover:scale-105 active:scale-95 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 duration-300" aria-label="Next slide">
+                <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
+            </button>
+
+            <!-- Indicator Dots -->
+            <div id="gallery-dots" class="flex justify-center flex-wrap gap-2 mt-6"></div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: FOUNDER -->
+    <section id="founder" class="py-24 bg-white border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-700 font-bold text-xs uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200">Meet the Founder</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-4 font-display">
+                    The Educator Behind FINLIT
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+                <!-- Founder Card Column -->
+                <div class="lg:col-span-5">
+                    <div class="bg-slate-50 rounded-3xl border border-slate-200/80 shadow-card-clean p-8 sm:p-10 text-center">
+                        <div class="w-28 h-28 rounded-full mx-auto mb-6 shadow-md border-4 border-white overflow-hidden ring-4 ring-emerald-500/20 bg-slate-200">
+                            <img src="anees.jpeg" alt="Anees KA" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 font-display">Anees KA</h3>
+                        <p class="text-sm font-semibold text-emerald-600 mt-1">Founder & Financial Educator — FINLIT</p>
+
+                        <div class="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-slate-200/80">
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 font-display">6+</div>
+                                <div class="text-[11px] text-slate-500 font-medium mt-1">Years of Experience</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 font-display">100+</div>
+                                <div class="text-[11px] text-slate-500 font-medium mt-1">Sessions Delivered</div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-3 mt-8">
+                            <button onclick="openModal('consultation')" class="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 bg-slate-900 hover:bg-navy-800 text-white font-bold rounded-2xl shadow-sm transition-all text-sm font-display">
+                                <i class="fa-solid fa-calendar-check text-emerald-400"></i> Book 1:1 Consultation — ₹1,999/-
+                            </button>
+                            <button onclick="openModal('training')" class="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-2xl border border-slate-200 shadow-sm transition-all text-sm">
+                                <i class="fa-solid fa-chalkboard-user text-blue-600"></i> Book a Training Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Founder Bio Column -->
+                <div class="lg:col-span-7 space-y-6">
+                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                        With 6+ years of experience across financial markets, financial education and market analysis, Anees has conducted 100+ sessions for students, professionals, colleges and organisations.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                        His work focuses on making financial concepts simple, practical and actionable—from personal finance and investing to trading, markets and financial careers.
+                    </p>
+
+                    <div>
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-3">Associated With</span>
+                        <div class="flex flex-wrap gap-2.5">
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">NSE Academy</span>
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">BSE FinX</span>
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">Motilal Oswal</span>
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">Enrich Money</span>
+                            <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">Financial Markets Educator</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                            <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold shrink-0 border border-blue-200">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm font-display">Education, Not Product Sales</h3>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">FINLIT's curriculum is built to teach concepts and skills, not to steer you toward specific products.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0 border border-emerald-200">
+                                <i class="fa-solid fa-language"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm font-display">Multilingual Learning</h3>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Modules delivered in English, Hindi, Tamil, Telugu, and Malayalam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: LEAD CAPTURE & BLUEPRINT DOWNLOAD -->
+    <section id="enroll" class="py-24 bg-slate-950 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <div class="max-w-3xl mx-auto text-center space-y-6">
+                <span class="px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                    Free Financial Resource
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-black tracking-tight font-display">
+                    Start Your Financial Freedom Journey <br/>
+                    <span class="text-emerald-400">Download Our Free Guide Today</span>
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                    Get instant access to <strong>"The 2026 Indian Financial Defense Blueprint"</strong> and learn how to defeat inflation step-by-step.
+                </p>
+
+                <!-- Lead Form -->
+                <form id="lead-form" onsubmit="handleLeadSubmit(event)" class="max-w-md mx-auto flex flex-col sm:flex-row gap-3 pt-4">
+                    <input type="email" required placeholder="Enter your email address..." class="w-full px-5 py-4 rounded-xl bg-white text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                    <button type="submit" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg transition-all text-sm shrink-0 font-display">
+                        Get Blueprint
+                    </button>
+                </form>
+                
+                <div id="form-success" class="hidden p-4 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 font-bold text-sm max-w-md mx-auto">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i> Blueprint sent! Check your inbox shortly.
+                </div>
+
+                <p class="text-xs text-slate-500 pt-2">
+                    100% Privacy guaranteed. Zero spam. Unsubscribe anytime.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+                
+                <div class="col-span-2 space-y-4">
+                    <a href="#" class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-black text-lg">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-xl font-black text-white font-display">FIN<span class="text-emerald-400">LIT</span></span>
+                    </a>
+                    <p class="text-xs leading-relaxed text-slate-400 max-w-sm">
+                        FINLIT — Financial Learning & Innovation Technologies — is a financial education, skills, certification and career ecosystem serving students, professionals, and institutions across India.
+                    </p>
+                    <div class="flex gap-4 pt-2 text-slate-400">
+                        <a href="#" onclick="openModal('social'); return false;" aria-label="FINLIT Twitter" class="hover:text-emerald-400 transition-colors"><i class="fa-brands fa-x-twitter text-lg"></i></a>
+                        <a href="#" onclick="openModal('social'); return false;" aria-label="FINLIT LinkedIn" class="hover:text-emerald-400 transition-colors"><i class="fa-brands fa-linkedin text-lg"></i></a>
+                        <a href="#" onclick="openModal('social'); return false;" aria-label="FINLIT YouTube" class="hover:text-emerald-400 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></a>
+                        <a href="#" onclick="openModal('social'); return false;" aria-label="FINLIT Instagram" class="hover:text-emerald-400 transition-colors"><i class="fa-brands fa-instagram text-lg"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4 font-display">Ecosystem</h4>
+                    <ul class="space-y-3 text-xs">
+                        <li><a href="#ecosystem" class="hover:text-white transition-colors">FINLIT Personal</a></li>
+                        <li><a href="#ecosystem" class="hover:text-white transition-colors">FINLIT Markets</a></li>
+                        <li><a href="#ecosystem" class="hover:text-white transition-colors">FINLIT Careers</a></li>
+                        <li><a href="#ecosystem" class="hover:text-white transition-colors">FINLIT Juniors</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4 font-display">Tools</h4>
+                    <ul class="space-y-3 text-xs">
+                        <li><a href="#simulator" class="hover:text-white transition-colors">SIP Calculator</a></li>
+                        <li><a href="#quiz" class="hover:text-white transition-colors">Literacy Assessment</a></li>
+                        <li><a href="#analytics" class="hover:text-white transition-colors">Market Analytics</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4 font-display">Institutional</h4>
+                    <ul class="space-y-3 text-xs">
+                        <li><a href="#founder" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" onclick="openModal('privacy'); return false;" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" onclick="openModal('terms'); return false;" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-slate-800 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p>© 2026 FINLIT — Financial Learning & Innovation Technologies. All rights reserved.</p>
+                <p class="text-center md:text-right max-w-xl leading-relaxed">
+                    Disclaimer: FINLIT provides educational content only. We are not SEBI registered financial advisors and do not offer personalized investment advice.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================ -->
+    <!-- MODALS (Privacy / Terms / Social / Booking)   -->
+    <!-- ============================================ -->
+    <div id="modal-overlay" class="hidden fixed inset-0 z-[100] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this) closeModal()">
+
+        <!-- Privacy Policy Modal -->
+        <div id="modal-privacy" class="modal-panel hidden bg-white rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-8 sm:p-10 relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-black text-slate-900 font-display mb-4">Privacy Policy</h3>
+            <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                <p>FINLIT respects your privacy. Information you share with us — such as your name, email, or phone number — is used only to respond to enquiries, process enrolments, and share relevant program updates.</p>
+                <p>We do not sell or rent your personal information to third parties. You may request that we delete your data at any time by contacting us directly.</p>
+                <p class="text-xs text-slate-400 pt-2">This is placeholder policy text — replace with your finalised, legally reviewed privacy policy before publishing.</p>
+            </div>
+        </div>
+
+        <!-- Terms of Service Modal -->
+        <div id="modal-terms" class="modal-panel hidden bg-white rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-8 sm:p-10 relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-black text-slate-900 font-display mb-4">Terms of Service</h3>
+            <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                <p>By enrolling in a FINLIT program or booking a session, you agree to attend in good faith and use the content shared for personal learning purposes only.</p>
+                <p>FINLIT provides educational content only. We are not SEBI registered financial advisors and do not offer personalized investment advice. Fees, once paid, follow the refund/rescheduling policy shared at the time of booking.</p>
+                <p class="text-xs text-slate-400 pt-2">This is placeholder terms text — replace with your finalised, legally reviewed terms before publishing.</p>
+            </div>
+        </div>
+
+        <!-- Social / Connect Modal -->
+        <div id="modal-social" class="modal-panel hidden bg-white rounded-3xl max-w-sm w-full p-8 sm:p-10 relative shadow-2xl text-center">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <div class="w-14 h-14 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center text-2xl mx-auto mb-5"><i class="fa-solid fa-share-nodes"></i></div>
+            <h3 class="text-xl font-black text-slate-900 font-display mb-2">Connect With FINLIT</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">Our social profiles are launching soon. In the meantime, reach out directly to stay updated on new batches and sessions.</p>
+        </div>
+
+        <!-- Book 1:1 Consultation Modal -->
+        <div id="modal-consultation" class="modal-panel hidden bg-white rounded-3xl max-w-md w-full max-h-[85vh] overflow-y-auto p-8 sm:p-10 relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <div class="w-12 h-12 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-calendar-check"></i></div>
+            <h3 class="text-xl font-black text-slate-900 font-display mb-1">Book a 1:1 Consultation</h3>
+            <p class="text-sm text-slate-500 mb-6">A personal session with Anees KA to work through your financial or career questions. <span class="font-bold text-slate-800">₹1,999/-</span></p>
+
+            <form id="consultation-form" onsubmit="handleBookingSubmit(event, 'consultation')" class="space-y-4">
+                <input type="text" required placeholder="Full name" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <input type="email" required placeholder="Email address" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <input type="tel" required placeholder="Phone number" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <textarea rows="3" placeholder="What would you like to discuss? (optional)" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400 resize-none"></textarea>
+                <button type="submit" class="w-full px-6 py-4 bg-slate-900 hover:bg-navy-800 text-white font-bold rounded-xl shadow-md transition-all text-sm font-display">
+                    Confirm Booking Request — ₹1,999/-
+                </button>
+            </form>
+            <div id="consultation-success" class="hidden text-center py-6">
+                <i class="fa-solid fa-circle-check text-emerald-500 text-3xl mb-3"></i>
+                <p class="font-bold text-slate-900">Request received!</p>
+                <p class="text-xs text-slate-500 mt-1">We'll reach out shortly to confirm your slot and share payment details.</p>
+            </div>
+        </div>
+
+        <!-- Book Training Session Modal -->
+        <div id="modal-training" class="modal-panel hidden bg-white rounded-3xl max-w-md w-full max-h-[85vh] overflow-y-auto p-8 sm:p-10 relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <div class="w-12 h-12 rounded-2xl bg-slate-900 text-blue-400 flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <h3 class="text-xl font-black text-slate-900 font-display mb-1">Book a Training Session</h3>
+            <p class="text-sm text-slate-500 mb-6">For colleges, companies, and institutions looking to host a FINLIT session for their students or employees.</p>
+
+            <form id="training-form" onsubmit="handleBookingSubmit(event, 'training')" class="space-y-4">
+                <input type="text" required placeholder="Full name" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <input type="text" required placeholder="Organisation / Institution" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <input type="email" required placeholder="Email address" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <input type="tel" required placeholder="Phone number" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400">
+                <textarea rows="3" placeholder="Expected group size, preferred dates, topic focus (optional)" class="w-full px-4 py-3.5 rounded-xl bg-slate-50 text-slate-900 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-medium text-sm placeholder-slate-400 resize-none"></textarea>
+                <button type="submit" class="w-full px-6 py-4 bg-slate-900 hover:bg-navy-800 text-white font-bold rounded-xl shadow-md transition-all text-sm font-display">
+                    Request Training Session
+                </button>
+            </form>
+            <div id="training-success" class="hidden text-center py-6">
+                <i class="fa-solid fa-circle-check text-emerald-500 text-3xl mb-3"></i>
+                <p class="font-bold text-slate-900">Request received!</p>
+                <p class="text-xs text-slate-500 mt-1">Our team will get in touch to plan the session details.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Smooth Hide Loader on Window Load
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('page-loader');
+            setTimeout(() => {
+                loader.classList.add('loaded');
+            }, 500);
+        });
+
+        // ============================================
+        // GALLERY SLIDER SYSTEM
+        // ============================================
+        (function() {
+            const track = document.getElementById('gallery-track');
+            const prevBtn = document.getElementById('gallery-prev');
+            const nextBtn = document.getElementById('gallery-next');
+            const dotsContainer = document.getElementById('gallery-dots');
+            
+            if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
+
+            const slides = Array.from(track.children);
+            const totalSlides = slides.length;
+            let currentIndex = 0;
+            let autoPlayTimer = null;
+            const intervalTime = 3000; // Slide every 3 seconds
+            
+            function getItemsPerView() {
+                return 1;
+            }
+            
+            function getMaxIndex() {
+                return totalSlides - 1;
+            }
+            
+            // Build pagination dots
+            function createDots() {
+                dotsContainer.innerHTML = '';
+                const maxIndex = getMaxIndex();
+                
+                for (let i = 0; i <= maxIndex; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-emerald-500 w-6' : 'bg-slate-300 hover:bg-slate-400'}`;
+                    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                    dot.addEventListener('click', () => {
+                        currentIndex = i;
+                        updateSlider();
+                        startAutoplay(); // Reset autoplay timer
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+            
+            function updateSlider() {
+                const maxIndex = getMaxIndex();
+                
+                if (currentIndex > maxIndex) {
+                    currentIndex = 0; // Wrap around
+                } else if (currentIndex < 0) {
+                    currentIndex = maxIndex;
+                }
+                
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                const offset = currentIndex * slideWidth;
+                track.style.transform = `translateX(-${offset}px)`;
+                
+                // Update dots styling
+                const dots = dotsContainer.children;
+                for (let i = 0; i < dots.length; i++) {
+                    if (this !== undefined && dots[i]) {
+                        if (i === currentIndex) {
+                            dots[i].className = 'w-2.5 h-2.5 rounded-full transition-all duration-300 bg-emerald-500 w-6';
+                        } else {
+                            dots[i].className = 'w-2.5 h-2.5 rounded-full transition-all duration-300 bg-slate-300 hover:bg-slate-400';
+                        }
+                    }
+                }
+            }
+            
+            function nextSlide() {
+                const maxIndex = getMaxIndex();
+                if (currentIndex >= maxIndex) {
+                    currentIndex = 0;
+                } else {
+                    currentIndex++;
+                }
+                updateSlider();
+            }
+            
+            function prevSlide() {
+                const maxIndex = getMaxIndex();
+                if (currentIndex <= 0) {
+                    currentIndex = maxIndex;
+                } else {
+                    currentIndex--;
+                }
+                updateSlider();
+            }
+            
+            function startAutoplay() {
+                stopAutoplay();
+                autoPlayTimer = setInterval(nextSlide, intervalTime);
+            }
+            
+            function stopAutoplay() {
+                if (autoPlayTimer) clearInterval(autoPlayTimer);
+            }
+            
+            // Button Events
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                startAutoplay();
+            });
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                startAutoplay();
+            });
+            
+            // Pause autoplay on hovering
+            const sliderArea = track.parentElement;
+            sliderArea.addEventListener('mouseenter', stopAutoplay);
+            sliderArea.addEventListener('mouseleave', startAutoplay);
+            
+            // Touch Swipe Support for mobile devices
+            let startX = 0;
+            let isSwiping = false;
+            
+            sliderArea.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isSwiping = true;
+                stopAutoplay();
+            }, { passive: true });
+            
+            sliderArea.addEventListener('touchmove', (e) => {
+                if (!isSwiping) return;
+                const currentX = e.touches[0].clientX;
+                const diffX = startX - currentX;
+                if (Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                    isSwiping = false;
+                }
+            }, { passive: true });
+            
+            sliderArea.addEventListener('touchend', () => {
+                isSwiping = false;
+                startAutoplay();
+            });
+            
+            // Initial render and timer startup
+            function init() {
+                createDots();
+                updateSlider();
+                startAutoplay();
+            }
+            
+            // Handle window resizing with resize throttling
+            let resizeTimeout = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    createDots();
+                    updateSlider();
+                }, 100);
+            });
+            
+            init();
+        })();
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Chart.js Default Config
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.font.family = 'Outfit';
+
+        // Chart 1: Financial Literacy Benchmark
+        const ctxLiteracy = document.getElementById('literacyChart').getContext('2d');
+        new Chart(ctxLiteracy, {
+            type: 'bar',
+            data: {
+                labels: ['India', 'UK', 'USA', 'Germany', 'Japan', 'China'],
+                datasets: [{
+                    label: 'Literacy Rate (%)',
+                    data: [27, 67, 57, 66, 43, 28],
+                    backgroundColor: [
+                        '#0069d9', // Highlight India
+                        '#e2e8f0',
+                        '#e2e8f0',
+                        '#e2e8f0',
+                        '#e2e8f0',
+                        '#e2e8f0'
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) { return ctx.raw + '% Literate'; }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                        ticks: { font: { size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Asset Breakdown
+        const ctxAllocation = document.getElementById('allocationChart').getContext('2d');
+        new Chart(ctxAllocation, {
+            type: 'doughnut',
+            data: {
+                labels: ['Low-Yield FDs & Cash', 'Real Estate & Gold', 'Equities & SIPs', 'Bonds & Others'],
+                datasets: [{
+                    data: [52, 35, 8, 5],
+                    backgroundColor: ['#071e3d', '#94a3b8', '#10b981', '#38bdf8'],
+                    borderWidth: 3,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, padding: 16, font: { size: 11 } }
+                    }
+                },
+                cutout: '68%'
+            }
+        });
+
+        // Chart 3: SIP Growth Trend
+        const ctxSip = document.getElementById('sipTrendChart').getContext('2d');
+        new Chart(ctxSip, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026 (Est)'],
+                datasets: [{
+                    label: 'Monthly SIP Inflow (₹ Cr)',
+                    data: [8123, 9182, 13041, 17073, 23332, 26000, 29500],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: '#047857',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) { return '₹' + ctx.raw.toLocaleString('en-IN') + ' Cr'; }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                        ticks: {
+                            callback: function(v) { return '₹' + v.toLocaleString('en-IN'); },
+                            font: { size: 10 }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // SIP Calculator Logic
+        const monthlyInput = document.getElementById('monthly-sip');
+        const rateInput = document.getElementById('return-rate');
+        const timeInput = document.getElementById('time-years');
+
+        const monthlyVal = document.getElementById('monthly-val');
+        const rateVal = document.getElementById('rate-val');
+        const yearsVal = document.getElementById('years-val');
+
+        const totalInvestedEl = document.getElementById('total-invested');
+        const wealthGainEl = document.getElementById('wealth-gain');
+        const totalValueEl = document.getElementById('total-value');
+
+        function formatINR(number) {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            }).format(number);
+        }
+
+        function calculateSIP() {
+            const P = parseFloat(monthlyInput.value);
+            const annualRate = parseFloat(rateInput.value);
+            const years = parseInt(timeInput.value);
+
+            const i = (annualRate / 12) / 100;
+            const n = years * 12;
+
+            const totalMaturity = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+            const totalInvested = P * n;
+            const wealthGain = totalMaturity - totalInvested;
+
+            monthlyVal.textContent = '₹' + P.toLocaleString('en-IN');
+            rateVal.textContent = annualRate + '%';
+            yearsVal.textContent = years + ' Years';
+
+            totalInvestedEl.textContent = formatINR(totalInvested);
+            wealthGainEl.textContent = formatINR(wealthGain);
+            totalValueEl.textContent = formatINR(totalMaturity);
+        }
+
+        monthlyInput.addEventListener('input', calculateSIP);
+        rateInput.addEventListener('input', calculateSIP);
+        timeInput.addEventListener('input', calculateSIP);
+        calculateSIP();
+
+        // Quiz Logic Engine
+        const quizQuestions = [
+            {
+                q: "1. If inflation is 6% per year and your savings account pays 3%, how much purchasing power do you lose annually?",
+                options: ["A) Gain 3% net", "B) Lose approximately 3%", "C) Zero purchasing power loss"],
+                correct: 1
+            },
+            {
+                q: "2. Why is an emergency fund critical prior to investing in equities?",
+                options: ["A) To cover vacation expenses", "B) Protect 3-6 months expenses so you don't distress-sell investments", "C) Maximize credit card limits"],
+                correct: 1
+            },
+            {
+                q: "3. What does the financial 'Rule of 72' calculate?",
+                options: ["A) Retirement age limit", "B) Approximate years required to double your investment", "C) Income tax slab percentage"],
+                correct: 1
+            }
+        ];
+
+        let currentQIndex = 0;
+        let quizScore = 0;
+
+        function checkAnswer(selectedIndex) {
+            if (selectedIndex === quizQuestions[currentQIndex].correct) {
+                quizScore++;
+            }
+            currentQIndex++;
+
+            if (currentQIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function renderQuizQuestion() {
+            document.getElementById('quiz-progress-num').textContent = currentQIndex + 1;
+            const qObj = quizQuestions[currentQIndex];
+            document.getElementById('quiz-question').textContent = qObj.q;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            qObj.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-4 text-left rounded-2xl border border-slate-200 bg-white hover:border-blue-500 hover:bg-blue-50/50 text-xs sm:text-sm font-semibold text-slate-700 transition-all shadow-sm";
+                btn.textContent = optText;
+                btn.onclick = () => checkAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resBox = document.getElementById('quiz-result');
+            resBox.classList.remove('hidden');
+
+            const titleEl = document.getElementById('quiz-score-title');
+            const descEl = document.getElementById('quiz-score-desc');
+
+            titleEl.textContent = `Assessment Score: ${quizScore}/3 ${quizScore === 3 ? '🎉 Excellent!' : '⚠️ Gap Detected'}`;
+            if (quizScore === 3) {
+                descEl.textContent = "Great financial awareness! Structured training on tax shielding and index fund asset allocation will help you compound wealth rapidly.";
+            } else {
+                descEl.textContent = "You may be losing purchasing power without realizing it! FINLIT's Level 1 program is designed to close these exact gaps.";
+            }
+        }
+
+        function resetQuiz() {
+            currentQIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        // ============================================
+        // HERO BANNER: "Same Salary, Two Lives" animation
+        // Illustrative story, not real market data.
+        // ============================================
+        (function initLifeStoryAnimation() {
+            const card = document.getElementById('life-story-card');
+            if (!card) return;
+
+            const ageCounter = document.getElementById('age-counter');
+            const ageBar = document.getElementById('age-progress-bar');
+            const trackABar = document.getElementById('track-a-bar');
+            const trackBBar = document.getElementById('track-b-bar');
+            const trackAValue = document.getElementById('track-a-value');
+            const trackBValue = document.getElementById('track-b-value');
+            const trackAEvent = document.getElementById('track-a-event');
+            const trackBEvent = document.getElementById('track-b-event');
+            const trackAIcon = document.getElementById('track-a-icon');
+            const trackBIcon = document.getElementById('track-b-icon');
+            const narration = document.getElementById('story-narration');
+            const replayBtn = document.getElementById('story-replay-btn');
+
+            // Keyframes of the story: age, wealth (₹), bar %, events, narration
+            const frames = [
+                { age: 25, aWealth: 0,        bWealth: 0,        aBar: 4,  bBar: 4,  aEvent: '',                         bEvent: '',                       aIcon: '',  bIcon: '',
+                  text: 'Both start at 25 on the exact same ₹50,000/month salary. No difference yet.' },
+                { age: 30, aWealth: 40000,    bWealth: 210000,   aBar: 6,  bBar: 12, aEvent: 'Spends on EMIs & upgrades', bEvent: 'Builds a 6-month emergency fund', aIcon: '💳', bIcon: '🛡️',
+                  text: 'Arjun upgrades his lifestyle with every raise. Priya automates savings before she ever sees the money.' },
+                { age: 35, aWealth: 150000,   bWealth: 950000,   aBar: 10, bBar: 26, aEvent: 'Medical emergency → credit card debt', bEvent: 'Emergency covered, SIP untouched', aIcon: '🏥', bIcon: '📈',
+                  text: 'A medical emergency hits both. Arjun has no cushion and borrows at 36% interest. Priya\'s fund absorbs it — her investments keep compounding.' },
+                { age: 45, aWealth: 380000,   bWealth: 3800000,  aBar: 22, bBar: 55, aEvent: 'Still repaying old debt',   bEvent: 'Compounding accelerates',  aIcon: '⏳', bIcon: '🌱',
+                  text: 'By 45, Arjun is still servicing old debt with new debt. Priya\'s early habit has quietly grown into serious money — this is compounding at work.' },
+                { age: 55, aWealth: 900000,   bWealth: 11200000, aBar: 38, bBar: 92, aEvent: 'Must work past 60',        bEvent: 'Financially independent', aIcon: '💼', bIcon: '🏖️',
+                  text: 'Same salary, same city, same 30 years. The only difference was financial literacy — and it decided who gets to retire on their own terms.' }
+            ];
+
+            function formatINR(n) {
+                return '₹' + new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(n);
+            }
+
+            function animateNumber(el, from, to, duration) {
+                const start = performance.now();
+                function step(now) {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const val = Math.round(from + (to - from) * eased);
+                    el.textContent = formatINR(val);
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }
+
+            let storyTimeouts = [];
+            let hasPlayed = false;
+
+            function playStory() {
+                storyTimeouts.forEach(t => clearTimeout(t));
+                storyTimeouts = [];
+
+                // Reset
+                ageCounter.textContent = '25';
+                ageBar.style.width = '0%';
+                trackABar.style.width = '4%';
+                trackBBar.style.width = '4%';
+                trackAValue.textContent = '₹0';
+                trackBValue.textContent = '₹0';
+                trackAEvent.textContent = '';
+                trackBEvent.textContent = '';
+                trackAIcon.style.opacity = '0';
+                trackBIcon.style.opacity = '0';
+                narration.textContent = frames[0].text;
+
+                let prevA = 0, prevB = 0;
+                const stepDelay = 1500;
+
+                frames.forEach((frame, idx) => {
+                    const t = setTimeout(() => {
+                        ageCounter.textContent = frame.age;
+                        ageBar.style.width = (((frame.age - 25) / (55 - 25)) * 100) + '%';
+                        trackABar.style.width = frame.aBar + '%';
+                        trackBBar.style.width = frame.bBar + '%';
+                        animateNumber(trackAValue, prevA, frame.aWealth, 900);
+                        animateNumber(trackBValue, prevB, frame.bWealth, 900);
+                        trackAEvent.textContent = frame.aEvent;
+                        trackBEvent.textContent = frame.bEvent;
+                        narration.textContent = frame.text;
+
+                        if (frame.aIcon) {
+                            trackAIcon.textContent = frame.aIcon;
+                            trackAIcon.style.opacity = '1';
+                        } else {
+                            trackAIcon.style.opacity = '0';
+                        }
+                        if (frame.bIcon) {
+                            trackBIcon.textContent = frame.bIcon;
+                            trackBIcon.style.opacity = '1';
+                        } else {
+                            trackBIcon.style.opacity = '0';
+                        }
+
+                        prevA = frame.aWealth;
+                        prevB = frame.bWealth;
+                    }, idx * stepDelay);
+                    storyTimeouts.push(t);
+                });
+            }
+
+            // Auto-play once when the banner scrolls into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasPlayed) {
+                        hasPlayed = true;
+                        playStory();
+                    }
+                });
+            }, { threshold: 0.4 });
+            observer.observe(card);
+
+            // Manual replay button
+            replayBtn.addEventListener('click', playStory);
+        })();
+
+        function handleLeadSubmit(e) {
+            e.preventDefault();
+            document.getElementById('lead-form').classList.add('hidden');
+            document.getElementById('form-success').classList.remove('hidden');
+        }
+
+        // ============================================
+        // MODAL SYSTEM (Privacy / Terms / Social / Booking)
+        // ============================================
+        function openModal(id) {
+            const overlay = document.getElementById('modal-overlay');
+            document.querySelectorAll('.modal-panel').forEach(panel => panel.classList.add('hidden'));
+            const panel = document.getElementById('modal-' + id);
+            if (!panel) return;
+            panel.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+            document.querySelectorAll('.modal-panel').forEach(panel => panel.classList.add('hidden'));
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        function handleBookingSubmit(e, type) {
+            e.preventDefault();
+            document.getElementById(type + '-form').classList.add('hidden');
+            document.getElementById(type + '-success').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
